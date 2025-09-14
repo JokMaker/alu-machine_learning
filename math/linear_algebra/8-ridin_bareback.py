@@ -14,8 +14,15 @@ def mat_mul(mat1, mat2):
     Returns:
         A new matrix that is the product of mat1 and mat2, or None if cannot multiply
     """
-    if len(mat1[0]) != len(mat2):
+    if len(mat1[0]) == len(mat2):
+        mat2_T = list(zip(*mat2))
+
+        return [
+            [
+                sum(i * j for i, j in zip(row, col))
+                for col in mat2_T
+            ]
+            for row in mat1
+        ]
+    else:
         return None
-    return [[sum(mat1[i][k] * mat2[k][j] for k in range(len(mat2)))
-             for j in range(len(mat2[0]))]
-            for i in range(len(mat1))]
