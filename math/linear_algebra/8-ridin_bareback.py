@@ -12,7 +12,8 @@ def mat_mul(mat1, mat2):
         mat2: Second matrix (2D list)
 
     Returns:
-        A new matrix that is the product of mat1 and mat2, or None if cannot multiply
+        A new matrix that is the product of mat1 and mat2, or None if
+        cannot multiply
     """
     if len(mat1[0]) == len(mat2):
         mat2_T = list(zip(*mat2))
