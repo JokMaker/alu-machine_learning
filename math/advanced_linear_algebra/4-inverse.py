@@ -52,9 +52,9 @@ def minor(matrix):
             for k in range(n):
                 if k != i:
                     row = []
-                    for l in range(n):
-                        if l != j:
-                            row.append(matrix[k][l])
+                    for col in range(n):
+                        if col != j:
+                            row.append(matrix[k][col])
                     submatrix.append(row)
             minor_row.append(determinant(submatrix))
         minor_matrix.append(minor_row)
