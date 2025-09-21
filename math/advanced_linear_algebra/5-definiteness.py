@@ -7,7 +7,8 @@ def definiteness(matrix):
     """Calculate the definiteness of a matrix
 
     Args:
-        matrix: numpy.ndarray of shape (n, n) whose definiteness should be calculated
+        matrix: numpy.ndarray of shape (n, n) whose definiteness should be
+                calculated
 
     Returns:
         String indicating definiteness or None if invalid
