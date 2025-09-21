@@ -4,10 +4,10 @@
 
 def determinant(matrix):
     """Calculate determinant for adjugate calculation
-    
+
     Args:
         matrix: list of lists
-        
+
     Returns:
         The determinant of matrix
     """
@@ -15,7 +15,7 @@ def determinant(matrix):
         return matrix[0][0]
     if len(matrix) == 2:
         return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
-    
+
     det = 0
     for j in range(len(matrix)):
         submatrix = []
@@ -31,17 +31,17 @@ def determinant(matrix):
 
 def minor(matrix):
     """Calculate minor matrix for adjugate calculation
-    
+
     Args:
         matrix: list of lists
-        
+
     Returns:
         The minor matrix of matrix
     """
     n = len(matrix)
     if n == 1:
         return [[1]]
-    
+
     minor_matrix = []
     for i in range(n):
         minor_row = []
@@ -61,57 +61,57 @@ def minor(matrix):
 
 def cofactor(matrix):
     """Calculate cofactor matrix for adjugate calculation
-    
+
     Args:
         matrix: list of lists
-        
+
     Returns:
         The cofactor matrix of matrix
     """
     minor_matrix = minor(matrix)
     cofactor_matrix = []
     n = len(matrix)
-    
+
     for i in range(n):
         cofactor_row = []
         for j in range(n):
             cofactor_row.append(((-1) ** (i + j)) * minor_matrix[i][j])
         cofactor_matrix.append(cofactor_row)
-    
+
     return cofactor_matrix
 
 
 def adjugate(matrix):
     """Calculate the adjugate matrix of a matrix
-    
+
     Args:
         matrix: list of lists whose adjugate matrix should be calculated
-        
+
     Returns:
         The adjugate matrix of matrix
     """
     if not isinstance(matrix, list):
         raise TypeError("matrix must be a list of lists")
-    
+
     if len(matrix) == 0:
         raise ValueError("matrix must be a non-empty square matrix")
-    
+
     for row in matrix:
         if not isinstance(row, list):
             raise TypeError("matrix must be a list of lists")
-    
+
     n = len(matrix)
     for row in matrix:
         if len(row) != n:
             raise ValueError("matrix must be a non-empty square matrix")
-    
+
     cofactor_matrix = cofactor(matrix)
     adjugate_matrix = []
-    
+
     for i in range(n):
         adjugate_row = []
         for j in range(n):
             adjugate_row.append(cofactor_matrix[j][i])
         adjugate_matrix.append(adjugate_row)
-    
+
     return adjugate_matrix
