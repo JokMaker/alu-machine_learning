@@ -1,29 +1,28 @@
 #!/usr/bin/env python3
-"""Module for calculating polynomial integrals"""
+"""_summary_
+This file contains the implementation of poly_integral
+"""
 
 
 def poly_integral(poly, C=0):
-    """Calculate integral of polynomial
-
-    Args:
-        poly: list of coefficients
-        C: integration constant
-
-    Returns:
-        List of integral coefficients or None if invalid
+    """_summary_
+    Computes the coefficients of the terms in the
+    integral of a function using Sum rule
     """
-    if not isinstance(poly, list) or len(poly) == 0:
+    if not isinstance(poly, list) or not isinstance(C, (int, float)) or not poly:  # noqa
         return None
-    if not isinstance(C, (int, float)):
-        return None
-    if not all(isinstance(x, (int, float)) for x in poly):
+    if not all(isinstance(c, (int, float)) for c in poly):
         return None
 
-    result = [C]
-    for i, coeff in enumerate(poly):
-        integral_coeff = coeff / (i + 1)
-        if integral_coeff == int(integral_coeff):
-            integral_coeff = int(integral_coeff)
-        result.append(integral_coeff)
-
-    return result
+    integrals = [C]
+    for power, coefficient in enumerate(poly):
+        if power == 0:
+            integrals.append(coefficient)
+        else:
+            integral = coefficient / (power + 1)
+            integrals.append(
+                int(integral) if integral.is_integer() else integral
+            )
+    while integrals[-1] == 0 and len(integrals) > 1:
+        integrals.pop()
+    return integrals
