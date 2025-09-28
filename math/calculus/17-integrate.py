@@ -26,4 +26,4 @@ def poly_integral(poly, C=0):
             integral_coeff = int(integral_coeff)
         result.append(integral_coeff)
     
-    return result
+    return result 
