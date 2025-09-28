@@ -4,10 +4,10 @@
 
 def poly_derivative(poly):
     """Calculate derivative of polynomial
-    
+
     Args:
         poly: list of coefficients
-        
+
     Returns:
         List of derivative coefficients or None if invalid
     """
@@ -18,4 +18,3 @@ def poly_derivative(poly):
     if len(poly) == 1:
         return [0]
     return [i * poly[i] for i in range(1, len(poly))]
-
