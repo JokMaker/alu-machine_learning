@@ -31,21 +31,11 @@ class Binomial:
         k = int(k)
         if k < 0 or k > self.n:
             return 0
-        
+
         # Calculate binomial coefficient
-        n_factorial = 1
-        for i in range(1, self.n + 1):
-            n_factorial *= i
-        
-        k_factorial = 1
-        for i in range(1, k + 1):
-            k_factorial *= i
-        
-        nk_factorial = 1
-        for i in range(1, self.n - k + 1):
-            nk_factorial *= i
-        
-        binomial_coeff = n_factorial / (k_factorial * nk_factorial)
+        binomial_coeff = 1
+        for i in range(k):
+            binomial_coeff = binomial_coeff * (self.n - i) / (i + 1)
         return binomial_coeff * (self.p ** k) * ((1 - self.p) ** (self.n - k))
 
     def cdf(self, k):
@@ -55,9 +45,8 @@ class Binomial:
             return 0
         if k >= self.n:
             return 1
-        
+
         cdf_value = 0
         for i in range(k + 1):
             cdf_value += self.pmf(i)
         return cdf_value
-    
