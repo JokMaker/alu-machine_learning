@@ -47,4 +47,3 @@ class MultiNormal:
         coefficient = 1 / np.sqrt((2 * np.pi) ** d * cov_det)
 
         return float(coefficient * np.exp(exponent))
-    
