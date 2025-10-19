@@ -4,7 +4,8 @@ import numpy as np
 
 
 def posterior(x, n, P, Pr):
-    """Calculate posterior probability for hypothetical probabilities given data
+    """Calculate posterior probability for hypothetical probabilities
+    given data
 
     Args:
         x: number of patients that develop severe side effects
