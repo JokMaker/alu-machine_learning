@@ -40,4 +40,3 @@ def marginal(x, n, P, Pr):
 
     # Marginal = sum of (likelihood * prior)
     return np.sum(likelihood_vals * Pr)
-
