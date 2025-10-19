@@ -5,20 +5,21 @@ import numpy as np
 
 def marginal(x, n, P, Pr):
     """Calculate marginal probability of obtaining the data
-    
+
     Args:
         x: number of patients that develop severe side effects
         n: total number of patients observed
         P: 1D numpy.ndarray containing hypothetical probabilities
         Pr: 1D numpy.ndarray containing prior beliefs about P
-        
+
     Returns:
         marginal probability of obtaining x and n
     """
     if not isinstance(n, int) or n <= 0:
         raise ValueError("n must be a positive integer")
     if not isinstance(x, int) or x < 0:
-        raise ValueError("x must be an integer that is greater than or equal to 0")
+        raise ValueError("x must be an integer that is greater than or "
+                         "equal to 0")
     if x > n:
         raise ValueError("x cannot be greater than n")
     if not isinstance(P, np.ndarray) or P.ndim != 1:
@@ -31,11 +32,12 @@ def marginal(x, n, P, Pr):
         raise ValueError("All values in Pr must be in the range [0, 1]")
     if not np.isclose(np.sum(Pr), 1):
         raise ValueError("Pr must sum to 1")
-    
+
     # Calculate likelihood
     from math import factorial
     binomial_coeff = factorial(n) / (factorial(x) * factorial(n - x))
     likelihood_vals = binomial_coeff * (P ** x) * ((1 - P) ** (n - x))
-    
+
     # Marginal = sum of (likelihood * prior)
     return np.sum(likelihood_vals * Pr)
+
