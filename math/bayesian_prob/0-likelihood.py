@@ -30,4 +30,3 @@ def likelihood(x, n, P):
     from math import factorial
     binomial_coeff = factorial(n) / (factorial(x) * factorial(n - x))
     return binomial_coeff * (P ** x) * ((1 - P) ** (n - x))
-
