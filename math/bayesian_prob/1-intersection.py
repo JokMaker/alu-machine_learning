@@ -40,4 +40,3 @@ def intersection(x, n, P, Pr):
 
     # Intersection = likelihood * prior
     return likelihood_vals * Pr
-
