@@ -91,6 +91,6 @@ class Neuron:
         dz = A - Y
         dw = np.matmul(dz, X.T) / m
         db = np.sum(dz) / m
-        
+
         self.__W -= alpha * dw
         self.__b -= alpha * db
