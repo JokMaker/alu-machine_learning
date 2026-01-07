@@ -35,4 +35,3 @@ class Neuron:
     def A(self):
         """Getter for activated output"""
         return self.__A
-    

@@ -94,4 +94,3 @@ class Neuron:
         
         self.__W -= alpha * dw
         self.__b -= alpha * db
-        
