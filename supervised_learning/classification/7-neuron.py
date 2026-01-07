@@ -91,7 +91,7 @@ class Neuron:
         dz = A - Y
         dw = np.matmul(dz, X.T) / m
         db = np.sum(dz) / m
-        
+
         self.__W -= alpha * dw
         self.__b -= alpha * db
 
@@ -126,24 +126,31 @@ class Neuron:
                 raise ValueError("step must be positive and <= iterations")
 
         costs = []
+        iterations_list = []
+
         for i in range(iterations + 1):
-            A = self.forward_prop(X)
-            cost = self.cost(Y, A)
+            if i == 0:
+                A = self.forward_prop(X)
+                cost = self.cost(Y, A)
+                if verbose:
+                    print(f"Cost after {i} iterations: {cost}")
+                if graph:
+                    costs.append(cost)
+                    iterations_list.append(i)
 
-            if verbose and (i == 0 or i % step == 0 or i == iterations):
-                print(f"Cost after {i} iterations: {cost}")
-
-            if graph and (i == 0 or i % step == 0 or i == iterations):
-                costs.append(cost)
-
-            if i < iterations:
+            if i > 0:
                 self.gradient_descent(X, Y, A, alpha)
+                A = self.forward_prop(X)
+                cost = self.cost(Y, A)
+
+                if verbose and (i % step == 0 or i == iterations):
+                    print(f"Cost after {i} iterations: {cost}")
+                if graph and (i % step == 0 or i == iterations):
+                    costs.append(cost)
+                    iterations_list.append(i)
 
         if graph:
             import matplotlib.pyplot as plt
-            iterations_list = list(range(0, iterations + 1, step))
-            if iterations not in iterations_list:
-                iterations_list.append(iterations)
             plt.plot(iterations_list, costs, 'b-')
             plt.xlabel('iteration')
             plt.ylabel('cost')
