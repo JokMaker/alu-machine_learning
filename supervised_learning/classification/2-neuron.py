@@ -48,3 +48,4 @@ class Neuron:
         z = np.matmul(self.__W, X) + self.__b
         self.__A = 1 / (1 + np.exp(-z))
         return self.__A
+    
