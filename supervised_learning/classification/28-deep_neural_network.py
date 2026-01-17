@@ -107,7 +107,8 @@ class DeepNeuralNetwork:
 
         Args:
             X: numpy.ndarray with shape (nx, m) containing input data
-            Y: numpy.ndarray with shape (classes, m) containing correct labels
+            Y: numpy.ndarray with shape (classes, m) with correct
+               labels
 
         Returns:
             The neuron's prediction and the cost of the network
