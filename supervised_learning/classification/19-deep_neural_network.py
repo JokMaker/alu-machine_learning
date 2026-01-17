@@ -29,8 +29,12 @@ class DeepNeuralNetwork:
                 raise TypeError("layers must be a list of positive integers")
             layer_size = layers[i]
             prev_layer_size = nx if i == 0 else layers[i - 1]
-            self.__weights["W{}".format(i + 1)] = np.random.randn(layer_size, prev_layer_size) * np.sqrt(2 / prev_layer_size)
-            self.__weights["b{}".format(i + 1)] = np.zeros((layer_size, 1))
+            W_key = "W{}".format(i + 1)
+            b_key = "b{}".format(i + 1)
+            weight_init = (np.random.randn(layer_size, prev_layer_size) *
+                           np.sqrt(2 / prev_layer_size))
+            self.__weights[W_key] = weight_init
+            self.__weights[b_key] = np.zeros((layer_size, 1))
 
     @property
     def L(self):
@@ -77,5 +81,6 @@ class DeepNeuralNetwork:
             The cost
         """
         m = Y.shape[1]
-        cost = -np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A)) / m
+        cost = (-np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
+                / m)
         return cost

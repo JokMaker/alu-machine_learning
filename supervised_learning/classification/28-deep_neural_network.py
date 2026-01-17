@@ -8,12 +8,13 @@ import pickle
 class DeepNeuralNetwork:
     """Defines a deep neural network"""
 
-    def __init__(self, nx, layers):
+    def __init__(self, nx, layers, activation='sig'):
         """Initialize deep neural network
 
         Args:
             nx: number of input features
             layers: list representing the number of nodes in each layer
+            activation: type of activation function used in hidden layers
         """
         if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
@@ -21,18 +22,25 @@ class DeepNeuralNetwork:
             raise ValueError("nx must be a positive integer")
         if not isinstance(layers, list) or len(layers) == 0:
             raise TypeError("layers must be a list of positive integers")
+        if activation not in ['sig', 'tanh']:
+            raise ValueError("activation must be 'sig' or 'tanh'")
 
         self.__L = len(layers)
         self.__cache = {}
         self.__weights = {}
+        self.__activation = activation
 
         for i in range(self.__L):
             if not isinstance(layers[i], int) or layers[i] <= 0:
                 raise TypeError("layers must be a list of positive integers")
             layer_size = layers[i]
             prev_layer_size = nx if i == 0 else layers[i - 1]
-            self.__weights["W{}".format(i + 1)] = np.random.randn(layer_size, prev_layer_size) * np.sqrt(2 / prev_layer_size)
-            self.__weights["b{}".format(i + 1)] = np.zeros((layer_size, 1))
+            W_key = "W{}".format(i + 1)
+            b_key = "b{}".format(i + 1)
+            weight_init = (np.random.randn(layer_size, prev_layer_size) *
+                           np.sqrt(2 / prev_layer_size))
+            self.__weights[W_key] = weight_init
+            self.__weights[b_key] = np.zeros((layer_size, 1))
 
     @property
     def L(self):
@@ -48,6 +56,11 @@ class DeepNeuralNetwork:
     def weights(self):
         """Getter for weights"""
         return self.__weights
+
+    @property
+    def activation(self):
+        """Getter for activation"""
+        return self.__activation
 
     def forward_prop(self, X):
         """Calculates forward propagation of the neural network
@@ -68,7 +81,10 @@ class DeepNeuralNetwork:
                 t = np.exp(z)
                 A = t / np.sum(t, axis=0, keepdims=True)
             else:
-                A = 1 / (1 + np.exp(-z))
+                if self.__activation == 'sig':
+                    A = 1 / (1 + np.exp(-z))
+                else:  # tanh
+                    A = np.tanh(z)
             self.__cache["A{}".format(i)] = A
         return self.__cache["A{}".format(self.__L)], self.__cache
 
@@ -117,7 +133,14 @@ class DeepNeuralNetwork:
             dw = np.matmul(dz, A_prev.T) / m
             db = np.sum(dz, axis=1, keepdims=True) / m
             if i > 1:
-                dz = np.matmul(self.__weights["W{}".format(i)].T, dz) * A_prev * (1 - A_prev)
+                if self.__activation == 'sig':
+                    W_curr = self.__weights["W{}".format(i)]
+                    dz = (np.matmul(W_curr.T, dz) * A_prev *
+                          (1 - A_prev))
+                else:  # tanh
+                    W_curr = self.__weights["W{}".format(i)]
+                    dz = (np.matmul(W_curr.T, dz) *
+                          (1 - A_prev * A_prev))
             self.__weights["W{}".format(i)] -= alpha * dw
             self.__weights["b{}".format(i)] -= alpha * db
 
