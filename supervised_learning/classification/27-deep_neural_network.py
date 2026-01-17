@@ -136,8 +136,8 @@ class DeepNeuralNetwork:
             Y: numpy.ndarray with shape (classes, m) containing correct labels
             iterations: number of iterations to train over
             alpha: learning rate
-            verbose: boolean that defines whether to print info
-            graph: boolean that defines whether to graph info
+            verbose: boolean for printing info
+            graph: boolean for graphing info
             step: step for verbose and graph
 
         Returns:
