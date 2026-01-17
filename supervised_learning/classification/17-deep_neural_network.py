@@ -31,8 +31,9 @@ class DeepNeuralNetwork:
             prev_layer_size = nx if i == 0 else layers[i - 1]
             key_w = 'W{}'.format(i + 1)
             key_b = 'b{}'.format(i + 1)
-            self.__weights[key_w] = (np.random.randn(layer_size, prev_layer_size) *
-                                     np.sqrt(2 / prev_layer_size))
+            weight_init = (np.random.randn(layer_size, prev_layer_size) *
+                           np.sqrt(2 / prev_layer_size))
+            self.__weights[key_w] = weight_init
             self.__weights[key_b] = np.zeros((layer_size, 1))
 
     @property
