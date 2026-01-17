@@ -29,8 +29,10 @@ class DeepNeuralNetwork:
                 raise TypeError("layers must be a list of positive integers")
             layer_size = layers[i]
             prev_layer_size = nx if i == 0 else layers[i - 1]
-            self.__weights[f'W{i + 1}'] = np.random.randn(layer_size, prev_layer_size) * np.sqrt(2 / prev_layer_size)
-            self.__weights[f'b{i + 1}'] = np.zeros((layer_size, 1))
+            key_w = 'W{}'.format(i + 1)
+            key_b = 'b{}'.format(i + 1)
+            self.__weights[key_w] = np.random.randn(layer_size, prev_layer_size) * np.sqrt(2 / prev_layer_size)
+            self.__weights[key_b] = np.zeros((layer_size, 1))
 
     @property
     def L(self):
@@ -58,10 +60,10 @@ class DeepNeuralNetwork:
         """
         self.__cache['A0'] = X
         for i in range(1, self.__L + 1):
-            W = self.__weights[f'W{i}']
-            b = self.__weights[f'b{i}']
-            A_prev = self.__cache[f'A{i - 1}']
+            W = self.__weights['W{}'.format(i)]
+            b = self.__weights['b{}'.format(i)]
+            A_prev = self.__cache['A{}'.format(i - 1)]
             z = np.matmul(W, A_prev) + b
             A = 1 / (1 + np.exp(-z))
-            self.__cache[f'A{i}'] = A
-        return self.__cache[f'A{self.__L}'], self.__cache
+            self.__cache['A{}'.format(i)] = A
+        return self.__cache['A{}'.format(self.__L)], self.__cache
