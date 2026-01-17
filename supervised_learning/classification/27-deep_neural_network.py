@@ -133,7 +133,7 @@ class DeepNeuralNetwork:
 
         Args:
             X: numpy.ndarray with shape (nx, m) containing input data
-            Y: numpy.ndarray with shape (classes, m) containing correct
+            Y: numpy.ndarray with shape (classes, m) with correct
                labels
             iterations: number of iterations to train over
             alpha: learning rate
