@@ -209,4 +209,3 @@ class DeepNeuralNetwork:
                 return pickle.load(f)
         except FileNotFoundError:
             return None
-        
