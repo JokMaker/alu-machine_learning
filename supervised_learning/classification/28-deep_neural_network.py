@@ -144,7 +144,8 @@ class DeepNeuralNetwork:
             self.__weights["W{}".format(i)] -= alpha * dw
             self.__weights["b{}".format(i)] -= alpha * db
 
-    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
+    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True,
+              graph=True, step=100):
         """Trains the deep neural network
 
         Args:
@@ -152,8 +153,8 @@ class DeepNeuralNetwork:
             Y: numpy.ndarray with shape (classes, m) containing correct labels
             iterations: number of iterations to train over
             alpha: learning rate
-            verbose: boolean that defines whether or not to print information
-            graph: boolean that defines whether or not to graph information
+            verbose: boolean that defines whether or not to print info
+            graph: boolean that defines whether or not to graph info
             step: step for verbose and graph
 
         Returns:
@@ -171,7 +172,8 @@ class DeepNeuralNetwork:
             if not isinstance(step, int):
                 raise TypeError("step must be an integer")
             if step <= 0 or step > iterations:
-                raise ValueError("step must be positive and <= iterations")
+                raise ValueError(
+                    "step must be positive and <= iterations")
 
         costs = []
         iters = []
@@ -181,7 +183,8 @@ class DeepNeuralNetwork:
             if i % step == 0 or i == iterations:
                 cost = self.cost(Y, A)
                 if verbose:
-                    print(f"Cost after {i} iterations: {cost}")
+                    msg = "Cost after {} iterations: {}"
+                    print(msg.format(i, cost))
                 if graph:
                     costs.append(cost)
                     iters.append(i)
