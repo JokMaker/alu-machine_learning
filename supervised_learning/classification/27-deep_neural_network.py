@@ -80,8 +80,10 @@ class DeepNeuralNetwork:
         """Calculates the cost of the model
 
         Args:
-            Y: numpy.ndarray with shape (classes, m) containing correct labels
-            A: numpy.ndarray with shape (classes, m) containing activated output
+            Y: numpy.ndarray with shape (classes, m) with correct
+               labels
+            A: numpy.ndarray with shape (classes, m) containing activated
+               output
 
         Returns:
             The cost
