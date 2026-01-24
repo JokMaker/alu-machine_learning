@@ -8,21 +8,6 @@ create_train_op = __import__('5-create_train_op').create_train_op
 forward_prop = __import__('2-forward_prop').forward_prop
 
 
-def _tf1_compat():
-    """Return a TensorFlow 1.x-compatible API surface.
-
-    Some checkers run with TensorFlow 2.x installed. In that case, we need to
-    use `tf.compat.v1` and disable eager execution for graph code.
-    """
-    if hasattr(tf, 'compat') and hasattr(tf.compat, 'v1'):
-        try:
-            tf.compat.v1.disable_eager_execution()
-        except Exception:
-            pass
-        return tf.compat.v1
-    return tf
-
-
 def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
           alpha, iterations, save_path="/tmp/model.ckpt"):
     """
@@ -42,8 +27,7 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
     Returns:
         path where the model was saved
     """
-    tf1 = _tf1_compat()
-
+    tf.reset_default_graph()
     x, y = create_placeholders(X_train.shape[1], Y_train.shape[1])
     y_pred = forward_prop(x, layer_sizes, activations)
     loss = calculate_loss(y, y_pred)
@@ -57,10 +41,10 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
     tf.add_to_collection('accuracy', accuracy)
     tf.add_to_collection('train_op', train_op)
 
-    saver = tf1.train.Saver()
+    saver = tf.train.Saver()
 
-    with tf1.Session() as sess:
-        sess.run(tf1.global_variables_initializer())
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
 
         for i in range(iterations + 1):
             if i % 100 == 0 or i == 0 or i == iterations:
