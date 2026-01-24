@@ -13,7 +13,6 @@ The model uses the reparameterization trick and adds KL divergence via
 """
 
 import tensorflow.keras as keras
-import tensorflow.keras.backend as K
 
 
 def autoencoder(input_dims, hidden_layers, latent_dims):
@@ -33,6 +32,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     """
 
     # Sampling function using (mu, log_sigma)
+    K = keras.backend
+
     def sampling(args):
         mu, log_sigma = args
         epsilon = K.random_normal(
