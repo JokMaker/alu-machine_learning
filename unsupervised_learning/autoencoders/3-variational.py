@@ -31,9 +31,10 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
             - auto: full VAE model
     """
 
-    # Sampling function using (mu, log_sigma)
+    # Get Keras backend
     K = keras.backend
 
+    # Sampling function using (mu, log_sigma)
     def sampling(args):
         mu, log_sigma = args
         epsilon = K.random_normal(
@@ -91,10 +92,11 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     )
     auto.add_loss(K.mean(kl_loss))
 
+    # Custom loss function
     def bce_sum(y_true, y_pred):
         """Binary cross-entropy summed across the feature dimension."""
         bce = keras.losses.binary_crossentropy(y_true, y_pred)
-        return K.sum(bce, axis=1)
+        return keras.backend.sum(bce, axis=1)
 
     auto.compile(optimizer='adam', loss=bce_sum)
 
