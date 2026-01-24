@@ -95,8 +95,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     # Custom loss function
     def bce_sum(y_true, y_pred):
         """Binary cross-entropy summed across the feature dimension."""
-        bce = keras.losses.binary_crossentropy(y_true, y_pred)
-        return keras.backend.sum(bce, axis=1)
+        bce = K.binary_crossentropy(y_true, y_pred)
+        return K.sum(bce, axis=1)
 
     auto.compile(optimizer='adam', loss=bce_sum)
 
