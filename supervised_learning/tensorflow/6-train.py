@@ -46,7 +46,7 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
         sess.run(tf.global_variables_initializer())
 
         for i in range(iterations + 1):
-            if i % 100 == 0 or i == iterations:
+            if i % 100 == 0 or i == 0 or i == iterations:
                 train_cost = sess.run(loss,
                                       feed_dict={x: X_train, y: Y_train})
                 train_accuracy = sess.run(accuracy,
