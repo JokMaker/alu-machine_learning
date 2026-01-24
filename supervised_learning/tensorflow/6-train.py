@@ -27,7 +27,6 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
     Returns:
         path where the model was saved
     """
-    tf.reset_default_graph()
     x, y = create_placeholders(X_train.shape[1], Y_train.shape[1])
     y_pred = forward_prop(x, layer_sizes, activations)
     loss = calculate_loss(y, y_pred)
