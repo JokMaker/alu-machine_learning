@@ -10,7 +10,23 @@ forward_prop = __import__('2-forward_prop').forward_prop
 
 def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
           alpha, iterations, save_path="/tmp/model.ckpt"):
-    """Builds, trains, and saves neural network classifier"""
+    """
+    Builds, trains, and saves a neural network classifier
+
+    Args:
+        X_train: numpy.ndarray containing the training input data
+        Y_train: numpy.ndarray containing the training labels
+        X_valid: numpy.ndarray containing the validation input data
+        Y_valid: numpy.ndarray containing the validation labels
+        layer_sizes: list containing the number of nodes in each layer
+        activations: list containing the activation functions for each layer
+        alpha: learning rate
+        iterations: number of iterations to train over
+        save_path: designates where to save the model
+
+    Returns:
+        path where the model was saved
+    """
     x, y = create_placeholders(X_train.shape[1], Y_train.shape[1])
     y_pred = forward_prop(x, layer_sizes, activations)
     loss = calculate_loss(y, y_pred)
