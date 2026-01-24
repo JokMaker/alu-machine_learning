@@ -60,6 +60,13 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     auto = keras.Model(inputs=encoder_inputs, outputs=auto_outputs,
                        name='autoencoder')
 
-    auto.compile(optimizer='adam', loss='binary_crossentropy')
+    K = keras.backend
+
+    def bce_sum(y_true, y_pred):
+        """Binary cross-entropy summed across the feature dimension."""
+        bce = K.binary_crossentropy(y_true, y_pred)
+        return K.sum(bce, axis=1)
+
+    auto.compile(optimizer='adam', loss=bce_sum)
 
     return encoder, decoder, auto
