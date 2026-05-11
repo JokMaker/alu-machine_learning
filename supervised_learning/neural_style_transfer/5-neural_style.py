@@ -95,12 +95,9 @@ class NST:
 
         shape = tf.shape(input_layer)
         h, w = shape[1], shape[2]
-        c = input_layer.shape[3]
 
-        F = tf.reshape(input_layer, (h * w, c))
-        gram = tf.matmul(F, F, transpose_a=True)
-        gram = gram / tf.cast(h * w, tf.float32)
-        return tf.expand_dims(gram, 0)
+        gram = tf.einsum('bijc,bijd->bcd', input_layer, input_layer)
+        return gram / tf.cast(h * w, tf.float32)
 
     def generate_features(self):
         """Extracts style and content features from the model."""
