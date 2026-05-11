@@ -145,9 +145,7 @@ class NST:
             raise TypeError(
                 "style_outputs must be a list with a length of {}".format(n))
 
-        weight = 1.0 / n
-        J_style = 0.0
-        for i, style_out in enumerate(style_outputs):
-            J_style += weight * self.layer_style_cost(
-                style_out, self.gram_style_features[i])
-        return J_style
+        costs = [self.layer_style_cost(style_outputs[i],
+                                       self.gram_style_features[i])
+                 for i in range(n)]
+        return tf.add_n(costs) / n
