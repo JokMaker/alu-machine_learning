@@ -130,11 +130,10 @@ class NST:
             raise TypeError(
                 "style_outputs must be a list with a length of {}".format(n))
 
-        weight = 1.0 / tf.cast(n, tf.float32)
         costs = [self.layer_style_cost(style_outputs[i],
                                        self.gram_style_features[i])
                  for i in range(n)]
-        return tf.reduce_sum([weight * cost for cost in costs])
+        return tf.add_n(costs) / n
 
     def content_cost(self, content_output):
         """Calculates the content cost for the generated image."""
@@ -247,7 +246,8 @@ class NST:
             if step is not None and (i % step == 0 or i == iterations):
                 print("Cost at iteration {}: {}, content {}, "
                       "style {}, var {}".format(
-                          i, J, J_content, J_style, J_var))
+                          i, J.numpy(), J_content.numpy(),
+                          J_style.numpy(), J_var.numpy()))
 
             if float(J) < best_cost:
                 best_cost = float(J)
