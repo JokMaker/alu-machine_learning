@@ -196,9 +196,9 @@ class NST:
         if step is not None:
             if not isinstance(step, int):
                 raise TypeError("step must be an integer")
-            if step <= 0 or step > iterations:
+            if step <= 0 or step >= iterations:
                 raise ValueError(
-                    "step must be positive and <= iterations")
+                    "step must be positive and less than iterations")
         if not isinstance(lr, (int, float)):
             raise TypeError("lr must be a number")
         if lr <= 0:
@@ -213,8 +213,8 @@ class NST:
             raise ValueError("beta2 must be in the range [0, 1]")
 
         generated_image = tf.Variable(self.content_image)
-        optimizer = tf.train.AdamOptimizer(
-            learning_rate=lr, beta1=beta1, beta2=beta2)
+        optimizer = tf.keras.optimizers.Adam(
+            learning_rate=lr, beta_1=beta1, beta_2=beta2)
 
         best_cost = float('inf')
         best_image = None
@@ -224,7 +224,7 @@ class NST:
 
             if step is not None and (i % step == 0 or i == iterations):
                 print("Cost at iteration {}: {}, content {}, style {}".format(
-                    i, J, J_content, J_style))
+                    i, J.numpy(), J_content.numpy(), J_style.numpy()))
 
             if float(J) < best_cost:
                 best_cost = float(J)
