@@ -127,10 +127,11 @@ class NST:
             raise TypeError(
                 "style_outputs must be a list with a length of {}".format(n))
 
-        costs = [self.layer_style_cost(style_outputs[i],
-                                       self.gram_style_features[i])
+        weight = 1.0 / n
+        costs = [weight * self.layer_style_cost(style_outputs[i],
+                                                self.gram_style_features[i])
                  for i in range(n)]
-        return tf.add_n(costs) / n
+        return tf.add_n(costs)
 
     def content_cost(self, content_output):
         """Calculates the content cost for the generated image."""

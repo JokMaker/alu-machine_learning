@@ -130,10 +130,11 @@ class NST:
             raise TypeError(
                 "style_outputs must be a list with a length of {}".format(n))
 
-        costs = [self.layer_style_cost(style_outputs[i],
-                                       self.gram_style_features[i])
+        weight = 1.0 / n
+        costs = [weight * self.layer_style_cost(style_outputs[i],
+                                                self.gram_style_features[i])
                  for i in range(n)]
-        return tf.add_n(costs) / n
+        return tf.add_n(costs)
 
     def content_cost(self, content_output):
         """Calculates the content cost for the generated image."""
@@ -216,9 +217,9 @@ class NST:
         if step is not None:
             if not isinstance(step, int):
                 raise TypeError("step must be an integer")
-            if step <= 0 or step >= iterations:
+            if step <= 0 or step > iterations:
                 raise ValueError(
-                    "step must be positive and less than iterations")
+                    "step must be positive and <= iterations")
         if not isinstance(lr, (int, float)):
             raise TypeError("lr must be a number")
         if lr <= 0:
@@ -243,7 +244,7 @@ class NST:
             grads, J, J_content, J_style, J_var = self.compute_grads(
                 generated_image)
 
-            if step is not None and i % step == 0:
+            if step is not None and (i % step == 0 or i == iterations):
                 print("Cost at iteration {}: {}, content {}, "
                       "style {}, var {}".format(
                           i, J, J_content, J_style, J_var))
