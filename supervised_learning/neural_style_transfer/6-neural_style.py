@@ -62,29 +62,21 @@ class NST:
                                           weights='imagenet')
         vgg.trainable = False
 
-        x = vgg.input
-        model_outputs = []
+        config = vgg.get_config()
+        for layer_conf in config['layers']:
+            if layer_conf['class_name'] == 'MaxPooling2D':
+                layer_conf['class_name'] = 'AveragePooling2D'
+
+        custom_vgg = tf.keras.Model.from_config(config)
+        custom_vgg.set_weights(vgg.get_weights())
+        custom_vgg.trainable = False
+
         target_layers = self.style_layers + [self.content_layer]
+        model_outputs = [custom_vgg.get_layer(name).output
+                         for name in target_layers]
 
-        for layer in vgg.layers[1:]:
-            if isinstance(layer, tf.keras.layers.MaxPooling2D):
-                x = tf.keras.layers.AveragePooling2D(
-                    pool_size=layer.pool_size,
-                    strides=layer.strides,
-                    padding=layer.padding,
-                    name=layer.name
-                )(x)
-            else:
-                layer.trainable = False
-                x = layer(x)
-
-            if layer.name in target_layers:
-                model_outputs.append(x)
-
-            if layer.name == self.content_layer:
-                break
-
-        self.model = tf.keras.Model(inputs=vgg.input, outputs=model_outputs)
+        self.model = tf.keras.Model(inputs=custom_vgg.input,
+                                    outputs=model_outputs)
 
     @staticmethod
     def gram_matrix(input_layer):
@@ -95,12 +87,9 @@ class NST:
 
         shape = tf.shape(input_layer)
         h, w = shape[1], shape[2]
-        c = input_layer.shape[3]
 
-        F = tf.reshape(input_layer, (h * w, c))
-        gram = tf.matmul(F, F, transpose_a=True)
-        gram = gram / tf.cast(h * w, tf.float32)
-        return tf.expand_dims(gram, 0)
+        gram = tf.einsum('bijc,bijd->bcd', input_layer, input_layer)
+        return gram / tf.cast(h * w, tf.float32)
 
     def generate_features(self):
         """Extracts style and content features from the model."""
@@ -138,12 +127,10 @@ class NST:
             raise TypeError(
                 "style_outputs must be a list with a length of {}".format(n))
 
-        weight = 1.0 / n
-        J_style = 0.0
-        for i, style_out in enumerate(style_outputs):
-            J_style += weight * self.layer_style_cost(
-                style_out, self.gram_style_features[i])
-        return J_style
+        costs = [self.layer_style_cost(style_outputs[i],
+                                       self.gram_style_features[i])
+                 for i in range(n)]
+        return tf.add_n(costs) / n
 
     def content_cost(self, content_output):
         """Calculates the content cost for the generated image.
