@@ -246,8 +246,7 @@ class NST:
             if step is not None and (i % step == 0 or i == iterations):
                 print("Cost at iteration {}: {}, content {}, "
                       "style {}, var {}".format(
-                          i, J.numpy(), J_content.numpy(),
-                          J_style.numpy(), J_var.numpy()))
+                          i, J, J_content, J_style, J_var))
 
             if float(J) < best_cost:
                 best_cost = float(J)
